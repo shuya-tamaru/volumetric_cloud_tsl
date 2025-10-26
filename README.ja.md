@@ -2,7 +2,7 @@
 
 日本語 | [English](./README.md)
 
-[![Volumetric Cloud TSL デモ](./public/thumbnail.jpg)](https://shuya-tamaru.github.io/volumetric_cloud_tsl/)
+[![Volumetric Cloud TSL デモ](https://shuya-tamaru.github.io/volumetric_cloud_tsl/thumbnail.jpg)](https://shuya-tamaru.github.io/volumetric_cloud_tsl/)
 
 Three.js TSL（Three.js Shading Language）で構築されたボリューメトリッククラウドレンダリングプロジェクト。WebGPU を使用したリアルタイムレイマーチングベースのクラウドシミュレーション。
 
