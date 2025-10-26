@@ -1,17 +1,19 @@
-# Terrain TSL
+# Volumetric Cloud TSL
 
 日本語 | [English](./README.md)
 
-[![Terrain TSL デモ](./public/thumbnail.png)](https://www.styublog.com/shader/terrain)
+[![Volumetric Cloud TSL デモ](./public/thumbnail.jpg)](https://shuya-tamaru.github.io/volumetric_cloud_tsl/)
 
-Three.js TSL（Three.js Shading Language）で構築されたプロシージャル地形レンダリングプロジェクト。動的な地形生成のシミュレーションを行ってます。
+Three.js TSL（Three.js Shading Language）で構築されたボリューメトリッククラウドレンダリングプロジェクト。WebGPU を使用したリアルタイムレイマーチングベースのクラウドシミュレーション。
 
-**[👉 ライブデモ](https://www.styublog.com/shader/terrain)**
+**[👉 ライブデモ](https://shuya-tamaru.github.io/volumetric_cloud_tsl/)**
 
 ## 参考
 
-- [GPU Gem3](https://developer.nvidia.com/gpugems/gpugems3/foreword)
-- [Three.js Example](https://threejs.org/examples/?q=tsl#webgpu_tsl_procedural_terrain)
+- [Three.js Example](https://threejs.org/examples/?q=cloud#webgpu_volume_cloud)
+- [YouTube チュートリアル](https://youtu.be/4QOcCGI6xOU?si=dhDji0EVlS9JZdu9)
+- [Real-time Volumetric Rendering Course Notes](https://patapom.com/topics/Revision2013/Revision%202013%20-%20Real-time%20Volumetric%20Rendering%20Course%20Notes.pdf)
+- [Getting to grips with ThreeJS Shading Language (TSL) – Part 16](https://niklever.com/tutorials/getting-to-grips-with-threejs-shading-language-tsl-16/)
 
 ## SNS
 

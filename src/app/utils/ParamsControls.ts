@@ -74,13 +74,13 @@ export class ParamsControls {
         this.cloudConfig.textureFrequencies.freq3.value = value;
         this.cloud.updateTextureParameters();
       });
-    cloudTextureFolder
-      .add(this.cloudConfig.textureFrequencies.freq4, "value", 1, 100, 1)
-      .name("Detail Frequency 4")
-      .onChange((value: number) => {
-        this.cloudConfig.textureFrequencies.freq4.value = value;
-        this.cloud.updateTextureParameters();
-      });
+    // cloudTextureFolder
+    //   .add(this.cloudConfig.textureFrequencies.freq4, "value", 1, 100, 1)
+    //   .name("Detail Frequency 4")
+    //   .onChange((value: number) => {
+    //     this.cloudConfig.textureFrequencies.freq4.value = value;
+    //     this.cloud.updateTextureParameters();
+    //   });
 
     //geometry
     geometryFolder
