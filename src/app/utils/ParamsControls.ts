@@ -16,12 +16,10 @@ export class ParamsControls {
   private initGUI() {
     this.gui = new GUI();
     const geometryFolder = this.gui.addFolder("🌍 Geometry");
-    const cloudDeformationFolder = this.gui.addFolder("🌥️ Cloud Deformation");
-    const cloudColorFolder = this.gui.addFolder("🎨 Cloud Color Settings");
+    const cloudSettingsFolder = this.gui.addFolder("🌥️ Cloud Settings");
     const cloudTextureFolder = this.gui.addFolder("🖼️ Cloud Texture");
-    const ohtersFolder = this.gui.addFolder("🔧 Others");
 
-    cloudColorFolder
+    cloudSettingsFolder
       .addColor(
         {
           color:
@@ -108,23 +106,29 @@ export class ParamsControls {
       });
 
     //cloud deformation
-    cloudDeformationFolder
+    cloudSettingsFolder
       .add(this.cloudConfig.densityScale, "value", 0.0, 10.0, 0.1)
       .name("Density Scale")
       .onChange((value: number) => {
         this.cloudConfig.densityScale.value = value;
       });
-    cloudDeformationFolder
+    cloudSettingsFolder
       .add(this.cloudConfig.cloudVisibilityThreshold, "value", 0.0, 2.0, 0.01)
       .name("Cloud Visibility Threshold")
       .onChange((value: number) => {
         this.cloudConfig.cloudVisibilityThreshold.value = value;
       });
-    cloudDeformationFolder
-      .add(this.cloudConfig.intensity, "value", 0.0, 100.0, 1)
+    cloudSettingsFolder
+      .add(
+        { intensity: 100.0 - this.cloudConfig.intensity.value },
+        "intensity",
+        0.0,
+        100.0,
+        1
+      )
       .name("Intensity")
       .onChange((value: number) => {
-        this.cloudConfig.intensity.value = value;
+        this.cloudConfig.intensity.value = 100.0 - value;
       });
   }
 }
