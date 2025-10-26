@@ -13,12 +13,11 @@ import {
   Loop,
   exp,
   clamp,
-  uint,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import { createNoiseTexture } from "./utils/createNoiseTexture";
 import { sample3D } from "./utils/sample3D";
-import type { CloudConfig } from "./cloudConfig";
+import { CloudConfig } from "./cloudConfig";
 
 export class Cloud {
   private scene: THREE.Scene;
@@ -130,7 +129,6 @@ export class Cloud {
 
       const steps = 64;
       const dstTraveled = float(0).toVar();
-      const count = uint(0).toVar();
       const stepSize = dstInsideBox.div(float(steps));
       const totalDensity = float(0.0).toVar();
       Loop(steps, () => {
@@ -151,8 +149,6 @@ export class Cloud {
           totalDensity.addAssign(wfbm);
         });
 
-        //sample density
-        count.addAssign(1);
         dstTraveled.addAssign(stepSize);
       });
       const densityPerSample = totalDensity.div(intensity);
@@ -166,12 +162,7 @@ export class Cloud {
   public updateCloudBoundaryBox() {
     this.geometry.dispose();
     this.mesh.geometry.dispose();
-    this.geometry = new THREE.BoxGeometry(
-      this.cloudConfig.boxSize.x.value,
-      this.cloudConfig.boxSize.y.value,
-      this.cloudConfig.boxSize.z.value
-    );
-    // this.createGeometry();
+    this.createGeometry();
     this.mesh.geometry = this.geometry;
     this.updateMaterialNode();
   }
