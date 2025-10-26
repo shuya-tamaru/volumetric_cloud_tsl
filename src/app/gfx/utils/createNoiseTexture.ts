@@ -12,8 +12,25 @@ import {
   vec4,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
+import type { UniformTypeOf } from "../../types/UniformType";
 
-export function createNoiseTexture(size = 64, cellCount = 6) {
+interface Frequencies {
+  freq1: UniformTypeOf<number>;
+  freq2: UniformTypeOf<number>;
+  freq3: UniformTypeOf<number>;
+  freq4: UniformTypeOf<number>;
+}
+
+export function createNoiseTexture(
+  size = 64,
+  cellCount = 6,
+  frequencies: Frequencies = {
+    freq1: uniform(2.0),
+    freq2: uniform(8.0),
+    freq3: uniform(20),
+    freq4: uniform(1),
+  }
+) {
   const slices = cellCount * cellCount;
 
   const storageTexture = new THREE.StorageTexture(
@@ -25,10 +42,10 @@ export function createNoiseTexture(size = 64, cellCount = 6) {
   storageTexture.generateMipmaps = false;
   storageTexture.needsUpdate = true;
 
-  const freq1 = uniform(2.0);
-  const freq2 = uniform(6.0);
-  const freq3 = uniform(20);
-  const freq4 = uniform(1);
+  const freq1 = frequencies.freq1;
+  const freq2 = frequencies.freq2;
+  const freq3 = frequencies.freq3;
+  const freq4 = frequencies.freq4;
 
   //@ts-ignore
   const computeTexture = Fn(({ storageTexture }) => {

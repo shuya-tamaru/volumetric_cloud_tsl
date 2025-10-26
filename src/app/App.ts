@@ -2,10 +2,9 @@ import { CameraManager } from "./core/CameraManager";
 import { ControlsManager } from "./core/ControlManager";
 import { RendererManager } from "./core/RendererManager";
 import { SceneManager } from "./core/SceneManager";
-import { GfxConfig } from "./gfx/gfxConfig";
-import * as THREE from "three/webgpu";
-import { ParamsControls } from "./utils/ParamsControls";
 import { Cloud } from "./gfx/Cloud";
+import { CloudConfig } from "./gfx/cloudConfig";
+import { ParamsControls } from "./utils/ParamsControls";
 
 export class App {
   private sceneManager!: SceneManager;
@@ -20,6 +19,7 @@ export class App {
   private aspect: number;
 
   private cloud!: Cloud;
+  private cloudConfig!: CloudConfig;
 
   constructor() {
     this.width = window.innerWidth;
@@ -44,13 +44,14 @@ export class App {
       this.cameraManager.camera,
       this.rendererManager.renderer.domElement
     );
+    this.cloudConfig = new CloudConfig();
     this.cloud = new Cloud(
       this.sceneManager.scene,
-      this.rendererManager.renderer
+      this.rendererManager.renderer,
+      this.cloudConfig
     );
-    // this.gfxConfig = new GfxConfig();
 
-    // new ParamsControls(this.gfxConfig, this.terrain);
+    new ParamsControls(this.cloudConfig, this.cloud);
   }
 
   private addObjectsToScene(): void {
