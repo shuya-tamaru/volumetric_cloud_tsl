@@ -17,7 +17,7 @@ export class CloudConfig {
   public textureSlice = { x: uniform(16), y: uniform(16) };
   public textureSize = 128;
   public textureFrequencies = {
-    freq1: uniform(2.0),
+    freq1: uniform(3.0),
     freq2: uniform(8.0),
     freq3: uniform(40.0),
     freq4: uniform(1.0),

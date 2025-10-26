@@ -16,9 +16,9 @@ export class CameraManager {
       );
 
     if (isMobile) {
-      this.camera.position.set(180, 100, 180);
+      this.camera.position.set(-245, 100, -245);
     } else {
-      this.camera.position.set(-90, 90, -90);
+      this.camera.position.set(-180, 80, -180);
     }
   }
 

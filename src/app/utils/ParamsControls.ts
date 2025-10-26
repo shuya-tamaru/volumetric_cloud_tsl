@@ -138,7 +138,7 @@ export class ParamsControls {
         { intensity: 100.0 - this.cloudConfig.intensity.value },
         "intensity",
         0.0,
-        100.0,
+        99.0,
         1
       )
       .name("Intensity")
