@@ -136,7 +136,6 @@ export class Cloud {
       Loop(steps, () => {
         const p = rayOrigin.add(rayDir.mul(dstToBox.add(dstTraveled)));
         const uvw = p.sub(boxMin).div(boxMax.sub(boxMin));
-
         //prettier-ignore
         //@ts-ignore
         const densitySample = sample3D(this.storageTexture, uvw, slices, cellsX, cellsY)
@@ -157,9 +156,7 @@ export class Cloud {
         dstTraveled.addAssign(stepSize);
       });
       const densityPerSample = totalDensity.div(intensity);
-      // If(densityPerSample.lessThanEqual(this.threshold), () => {
-      //   color.assign(vec4(0.0));
-      // });
+
       const transmittance = exp(densityPerSample.mul(-1.0));
       return vec4(1.0).sub(color.mul(transmittance));
     })();

@@ -54,14 +54,14 @@ export class ParamsControls {
       });
 
     cloudTextureFolder
-      .add(this.cloudConfig.textureFrequencies.freq1, "value", 0, 10.0, 1)
+      .add(this.cloudConfig.textureFrequencies.freq1, "value", 0, 50.0, 1)
       .name("Large Frequency 1")
       .onChange((value: number) => {
         this.cloudConfig.textureFrequencies.freq1.value = value;
         this.cloud.updateTextureParameters();
       });
     cloudTextureFolder
-      .add(this.cloudConfig.textureFrequencies.freq2, "value", 0, 20, 1)
+      .add(this.cloudConfig.textureFrequencies.freq2, "value", 0, 50, 1)
       .name("Medium Frequency 2")
       .onChange((value: number) => {
         this.cloudConfig.textureFrequencies.freq2.value = value;

@@ -19,7 +19,7 @@ export class CloudConfig {
   public textureFrequencies = {
     freq1: uniform(2.0),
     freq2: uniform(8.0),
-    freq3: uniform(20.0),
+    freq3: uniform(40.0),
     freq4: uniform(1.0),
   };
 

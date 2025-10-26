@@ -17,8 +17,8 @@ export class SceneManager {
     const context = canvas.getContext("2d");
     if (context) {
       const gradient = context!.createLinearGradient(0, 0, 0, 100);
-      gradient.addColorStop(0.0, "#87CEEB"); // 上部：水色（スカイブルー）
-      gradient.addColorStop(1.0, "#1E90FF"); // 下部：青色（ドッジャーブルー）
+      gradient.addColorStop(0.0, "#87CEEB");
+      gradient.addColorStop(1.0, "#1E90FF");
       context!.fillStyle = gradient;
       context!.fillRect(0, 0, 1, 100);
 
@@ -26,7 +26,7 @@ export class SceneManager {
       skyMap.colorSpace = THREE.SRGBColorSpace;
 
       const sky = new THREE.Mesh(
-        new THREE.SphereGeometry(400),
+        new THREE.SphereGeometry(1000),
         new THREE.MeshBasicNodeMaterial({ map: skyMap, side: THREE.BackSide })
       );
       this.scene.add(sky);
