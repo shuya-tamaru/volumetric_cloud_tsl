@@ -15,9 +15,24 @@ export class ParamsControls {
 
   private initGUI() {
     this.gui = new GUI();
+
+    // Mobile detection
+    const isMobile =
+      window.innerWidth <= 768 ||
+      /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
     const geometryFolder = this.gui.addFolder("🌍 Geometry");
     const cloudSettingsFolder = this.gui.addFolder("🌥️ Cloud Settings");
     const cloudTextureFolder = this.gui.addFolder("🖼️ Cloud Texture");
+
+    // Close folders by default on mobile
+    if (isMobile) {
+      geometryFolder.close();
+      cloudSettingsFolder.close();
+      cloudTextureFolder.close();
+    }
 
     cloudSettingsFolder
       .addColor(
