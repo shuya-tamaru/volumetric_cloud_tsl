@@ -26,12 +26,14 @@ export class ParamsControls {
     const geometryFolder = this.gui.addFolder("🌍 Geometry");
     const cloudSettingsFolder = this.gui.addFolder("🌥️ Cloud Settings");
     const cloudTextureFolder = this.gui.addFolder("🖼️ Cloud Texture");
+    const sunSettingsFolder = this.gui.addFolder("🌞 Sun Settings");
 
     // Close folders by default on mobile
     if (isMobile) {
       geometryFolder.close();
       cloudSettingsFolder.close();
       cloudTextureFolder.close();
+      sunSettingsFolder.close();
     }
 
     cloudSettingsFolder
@@ -145,5 +147,29 @@ export class ParamsControls {
       .onChange((value: number) => {
         this.cloudConfig.intensity.value = 100.0 - value;
       });
+    sunSettingsFolder
+      .add(this.cloudConfig.sunDirectionX, "value", -1.0, 1.0, 0.01)
+      .name("Sun Direction X");
+    // sunSettingsFolder
+    //   .add(this.cloudConfig.sunDirectionY, "value", -1.0, 1.0, 0.01)
+    //   .name("Sun Direction Y");
+    sunSettingsFolder
+      .add(this.cloudConfig.sunDirectionZ, "value", -1.0, 1.0, 0.01)
+      .name("Sun Direction Z");
+    sunSettingsFolder
+      .add(this.cloudConfig.lightAbsorption, "value", 0, 0.1, 0.001)
+      .name("Light Absorption");
+    sunSettingsFolder
+      .add(this.cloudConfig.darknessThreshold, "value", 0, 1.0, 0.001)
+      .name("Darkness Threshold");
+    sunSettingsFolder
+      .add(this.cloudConfig.sunTransScale, "value", 0, 10.0, 0.1)
+      .name("Sun Transmittance Scale");
+    sunSettingsFolder
+      .add(this.cloudConfig.asymmetry, "value", 0, 0.95, 0.001)
+      .name("Asymmetry");
+    sunSettingsFolder
+      .add(this.cloudConfig.lightIntensity, "value", 0, 0.15, 0.001)
+      .name("Light Intensity");
   }
 }

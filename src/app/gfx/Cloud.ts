@@ -13,6 +13,9 @@ import {
   Loop,
   exp,
   clamp,
+  dot,
+  pow,
+  PI,
 } from "three/tsl";
 import * as THREE from "three/webgpu";
 import { createNoiseTexture } from "./utils/createNoiseTexture";
@@ -52,6 +55,7 @@ export class Cloud {
       this.cloudConfig.boxSize.y.value,
       this.cloudConfig.boxSize.z.value
     );
+    this.geometry.rotateX(Math.PI / 2);
   }
 
   private createMaterial() {
@@ -88,6 +92,14 @@ export class Cloud {
       intensity,
       textureSlice,
       cloudColor,
+      sunDirectionX,
+      sunDirectionY,
+      sunDirectionZ,
+      lightAbsorption,
+      darknessThreshold,
+      sunTransScale,
+      asymmetry,
+      lightIntensity,
     } = this.cloudConfig;
     const cellsX = textureSlice.x.value;
     const cellsY = textureSlice.y.value;
@@ -101,15 +113,16 @@ export class Cloud {
       const invModel = modelWorldMatrixInverse;
       const rayOrigin = invModel.mul(vec4(rayOriginWorld, 1.0)).xyz;
       const rayDir = normalize(invModel.mul(vec4(rayDirWorld, 0.0)).xyz);
+      // geometry.rotateX(Math.PI/2)によりY/Zが入れ替わるため、シェーダー内でもY/Zを入れ替える
       const boxMin = vec3(
         boxSize.x.mul(-0.5),
-        boxSize.y.mul(-0.5),
-        boxSize.z.mul(-0.5)
+        boxSize.z.mul(-0.5),
+        boxSize.y.mul(-0.5)
       );
       const boxMax = vec3(
         boxSize.x.mul(0.5),
-        boxSize.y.mul(0.5),
-        boxSize.z.mul(0.5)
+        boxSize.z.mul(0.5),
+        boxSize.y.mul(0.5)
       );
 
       const invDir = vec3(1.0).div(rayDir);
@@ -127,13 +140,40 @@ export class Cloud {
         color.assign(vec4(0.0));
       });
 
+      //density
       const steps = 64;
       const dstTraveled = float(0).toVar();
       const stepSize = dstInsideBox.div(float(steps));
       const totalDensity = float(0.0).toVar();
+
+      //lighting
+      const sunDirWorld = vec3(sunDirectionX, sunDirectionY, sunDirectionZ);
+      const toSunDirection = sunDirWorld.negate();
+
+      const sunSteps = 8;
+      // geometry.rotateX(Math.PI/2)によりY/Zが入れ替わるため、z方向のサイズを使う
+      const sunStep = boxSize.z.value / sunSteps;
+      const densityToSun = float(0.0).toVar();
+      const lightAccum = float(0.0).toVar();
+      const g = float(asymmetry); // parameter
+      const g2 = g.mul(g);
+      // numerator = (1 - g^2)
+      const cosTheta = dot(rayDirWorld, sunDirWorld);
+      const numerator = float(1.0).sub(g2);
+      const denomBase = float(1.0)
+        .add(g2)
+        .sub(cosTheta.mul(g.mul(2.0)));
+      const eps = float(0.000001);
+      const denomSafe = max(denomBase, eps);
+      const denom = pow(denomSafe, float(1.5));
+      const inv4pi = float(1.0).div(float(4.0).mul(PI));
+      const hgPhase = inv4pi.mul(numerator.div(denom));
+      const hgSoft = hgPhase.div(float(1.0).add(hgPhase));
+
       Loop(steps, () => {
         const p = rayOrigin.add(rayDir.mul(dstToBox.add(dstTraveled)));
         const uvw = p.sub(boxMin).div(boxMax.sub(boxMin));
+
         //prettier-ignore
         //@ts-ignore
         const densitySample = sample3D(this.storageTexture, uvw, slices, cellsX, cellsY)
@@ -146,6 +186,27 @@ export class Cloud {
           .toVar();
 
         If(wfbm.greaterThan(cloudVisibilityThreshold), () => {
+          //shadow
+          Loop(sunSteps, (i) => {
+            const pSun = p.add(
+              toSunDirection.mul(float(sunStep).mul(float(i.i)))
+            );
+            const uvwSun = pSun.sub(boxMin).div(boxMax.sub(boxMin));
+            //prettier-ignore
+            //@ts-ignore
+            const densityToSunSample = sample3D(this.storageTexture, uvwSun, slices, cellsX, cellsY)
+            densityToSun.addAssign(densityToSunSample.x.mul(densityScale));
+          });
+          const sunTrans = exp(
+            densityToSun.mul(float(-1.0).mul(lightAbsorption))
+          ).mul(sunTransScale);
+          const shadow = darknessThreshold.add(
+            sunTrans.mul(float(1.0).sub(darknessThreshold))
+          );
+          const powder = exp(wfbm.mul(-2.0));
+          const scatter = wfbm.mul(hgSoft).mul(shadow).mul(powder);
+          lightAccum.addAssign(scatter);
+
           totalDensity.addAssign(wfbm);
         });
 
@@ -154,7 +215,10 @@ export class Cloud {
       const densityPerSample = totalDensity.div(intensity);
 
       const transmittance = exp(densityPerSample.mul(-1.0));
-      return vec4(1.0).sub(color.mul(transmittance));
+      const opacity = float(1.0).sub(transmittance);
+      const baseColor = float(1.0).sub(color.mul(transmittance));
+      const finalColor = baseColor.add(lightAccum.mul(lightIntensity));
+      return vec4(finalColor, opacity);
     })();
     this.material.transparent = true;
   }
