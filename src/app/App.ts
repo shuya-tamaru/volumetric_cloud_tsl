@@ -4,6 +4,7 @@ import { RendererManager } from "./core/RendererManager";
 import { SceneManager } from "./core/SceneManager";
 import { Cloud } from "./gfx/Cloud";
 import { CloudConfig } from "./gfx/cloudConfig";
+import { Sun } from "./gfx/Sun";
 import { ParamsControls } from "./utils/ParamsControls";
 
 export class App {
@@ -19,6 +20,7 @@ export class App {
   private aspect: number;
 
   private cloud!: Cloud;
+  private sun!: Sun;
   private cloudConfig!: CloudConfig;
 
   constructor() {
@@ -50,12 +52,14 @@ export class App {
       this.rendererManager.renderer,
       this.cloudConfig
     );
+    this.sun = new Sun(this.sceneManager.scene, this.cloudConfig);
 
     new ParamsControls(this.cloudConfig, this.cloud);
   }
 
   private addObjectsToScene(): void {
     this.cloud.addToScene();
+    this.sun.addToScene();
   }
 
   private handleResize = (): void => {
@@ -77,6 +81,7 @@ export class App {
       this.sceneManager.scene,
       this.cameraManager.camera
     );
+    this.sun.updateLookAt(this.cameraManager.camera.position);
   };
 
   private startAnimation(): void {
