@@ -1,4 +1,4 @@
-import { color, uniform, vec3 } from "three/tsl";
+import { color, uniform } from "three/tsl";
 
 export interface TextureConfig {
   size: number;

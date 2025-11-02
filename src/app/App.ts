@@ -52,11 +52,7 @@ export class App {
       this.rendererManager.renderer,
       this.cloudConfig
     );
-    this.sun = new Sun(
-      this.sceneManager.scene,
-      this.rendererManager.renderer,
-      this.cloudConfig
-    );
+    this.sun = new Sun(this.sceneManager.scene, this.cloudConfig);
 
     new ParamsControls(this.cloudConfig, this.cloud);
   }

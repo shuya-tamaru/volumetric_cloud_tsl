@@ -7,7 +7,6 @@ import {
   Fn,
   If,
   length,
-  positionLocal,
   smoothstep,
   uv,
   vec3,
@@ -22,11 +21,7 @@ export class Sun {
   private material!: THREE.MeshBasicNodeMaterial;
   private mesh!: THREE.Mesh;
 
-  constructor(
-    scene: THREE.Scene,
-    renderer: THREE.WebGPURenderer,
-    cloudConfig: CloudConfig
-  ) {
+  constructor(scene: THREE.Scene, cloudConfig: CloudConfig) {
     this.scene = scene;
     this.cloudConfig = cloudConfig;
     this.createGeometry();
